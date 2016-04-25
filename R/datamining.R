@@ -1,4 +1,8 @@
 library(ggplot2)
+library(MASS)
+library(plotrix)
+library(raster)
+library(sp)
 
 readCSV<-function(input){
 
@@ -13,12 +17,53 @@ readCSV<-function(input){
 }
 
 
-dataAdjust<-function(){
+attackperHour<-function(){
 
   hours<-table((format(strptime(csv$TimeStamp, format='%d/%m/%Y %H:%M'),'%H')))
   percents<-(hours/numLines)*100
   print(sum(percents))
   plot(percents)
+
+}
+
+attackSourceCountry<-function(){
+
+  originCountryAttack<-table(csv$Pais_origen)
+  percents<-(originCountryAttack/numLines)*100
+  print(percents)
+  plot(percents)
+}
+
+attackDestinyCountry<-function(){
+
+  originCountryAttack<-table(csv$Pais_destino)
+  percents<-(originCountryAttack/numLines)*100
+  print(percents)
+  plot(percents)
+}
+
+attackforApplication<-function(){
+  attack<-table(csv$Protocolo)
+  percents<-(attack/numLines)*100
+  print(percents)
+  plot(percents)
+}
+
+levelofRisk<-function(){
+  risk<-table(csv$Nivel_de_riesgo)
+  percents<-(risk/numLines)*100
+  print(percents)
+  pie3D(percents, col=rainbow(length(percents)), main="Pie chart Level of Risk")
+}
+
+getIps2Long()<-function(){
+  ipsList<-table(csv$IP_origen)
+  ## Working
+}
+
+plotMap<-function(){
+
+  ## Working
 
 }
 
