@@ -1,6 +1,7 @@
 library(ggplot2)
 library(MASS)
 library(plotrix)
+library(rworldmap)
 library(raster)
 library(sp)
 
@@ -28,11 +29,31 @@ attackperHour<-function(){
 
 attackSourceCountry<-function(){
 
-  originCountryAttack<-table(csv$Pais_origen)
-  percents<-(originCountryAttack/numLines)*100
-  print(percents)
-  plot(percents)
+  countries <- table(csv$Pais_origen)
+
+  dataframe <- data.frame(country=names(countries),
+                          value=(as.vector(countries)/numLines)*100)
+
+  country2Map <- joinCountryData2Map(dataframe,
+                                     joinCode="ISO2",
+                                     nameJoinColumn="country")
+
+  mapCountryData(country2Map,
+                 nameColumnToPlot="value",
+                 mapTitle="Europe",
+                 xlim=c(-10, 40), ylim=c(35, 70),
+                 colourPalette="red2yellow",
+                 addLegend=FALSE,
+                 oceanCol="lightblue", missingCountryCol="black")
+
 }
+# attackSourceCountry<-function(){
+#
+#   originCountryAttack<-table(csv$Pais_origen)
+#   percents<-(originCountryAttack/numLines)*100
+#   print(percents)
+#   plot(percents)
+# }
 
 attackDestinyCountry<-function(){
 
@@ -56,17 +77,18 @@ levelofRisk<-function(){
   pie3D(percents, col=rainbow(length(percents)), main="Pie chart Level of Risk")
 }
 
-getIps2Long()<-function(){
-  ipsList<-table(csv$IP_origen)
-  ## Working
+# getIps2Long()<-function(){
+#   ipsList<-table(csv$IP_origen)
+#   ## Working
+# }
+
+
+test<-function(){
+  originCountryAttack<-(table(csv$Pais_origen))
+
+  print(as.vector(originCountryAttack))
 }
-
-plotMap<-function(){
-
-  ## Working
-
-}
-
 readCSV()
+
 
 
