@@ -11,7 +11,19 @@ output: html_document
 <!-- knitr::include_graphics("http://grlum.dpe.upc.edu/img/upc.gif") -->
 <!-- ``` -->
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+En el siguiente documento se realizará un analisis de las funcionalidades y capacidades de deteccion del antivirus perimetral de la empresa **JSO S.A.**
+
+Se analizarán al detalle los siguientes puntos:
+
+* **Ataques recibidos por franja horaria**  
+
+* **Ataques recibidos por pais de origen**
+
+* **Ataques recibidos por origen de aplicación**
+
+* **Ataques recibidos por nivel de criticidad**
+
+* **Efectividad del sistema de reputacion web del antivirus**
 
 To learn more, see [Github link](https://github.com/TheMaphius/DataMiningProject/tree/joshuagp).
 
@@ -32,7 +44,7 @@ To learn more, see [Github link](https://github.com/TheMaphius/DataMiningProject
   # download.file(fileUrl, destfile = "./resources/log_tuneado.csv", method = "curl")
 
   #path = paste(getwd(),"/resources/log_tuneado.csv",sep="")
-  path = paste("C:/Users/Joshua/Documents/dataminingproject/resources/log_tuneado.csv",sep="")
+  path = paste("C:/Users/Joshua/Desktop/DataMiningProject-master/resources/log_tuneado.csv",sep="")
 
   csv<<-read.csv(file=path, header=FALSE, sep=";",
                    col.names = c("c1","TimeStamp","c3","c4","c5","c6","c7","IP_origen","IP_Publica","c10","IP_interna","c12","c13","Protocolo","c15","Desde","Hacia","c18","c19","c20","c21","c22","c23","c24","Puerto_destino","c26","c27","c28","c29","c30","c31","32","Malicioso","Nivel_de_riesgo","35","c36","c37","Pais_origen","Pais_destino","c40","c41","c42","c43","c44","c45","c46","c47","c48","c49","Sender","Subject","Remitente","c53","c54","c55","c56","c57"), colClasses = c("character", "factor", "factor", "character" )) [,c("TimeStamp","IP_origen","IP_Publica","Protocolo","Desde","Hacia","Puerto_destino","Malicioso","Nivel_de_riesgo","Pais_origen","Pais_destino","Sender","Subject","Remitente")]
@@ -41,9 +53,14 @@ To learn more, see [Github link](https://github.com/TheMaphius/DataMiningProject
   
 ```
 
-## Preg 1
+## Pregunta 1: Ataques recibidos por franja horaria
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+A continuación se muestra un gráfico mensual de los ataques recibidos por franja horaria.
+
+El estado actual del gráfico, es una relacion de todos los ataques recibidos sin filtrar por mes ni por año.
+
+A modo de **ejemplo**, si filtramos por el mes de Marzo en el año 2016 se puede apreciar que a las 09:00 h se detectaron el mayor numero de ataques.
+
 
 ```{r rateAttack, echo=FALSE}
   
@@ -84,9 +101,16 @@ renderPlot({
 
 ```
 
-## Preg 2
+## Pregunta 2: Ataques recibidos por pais de origen
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+En el siguiente mapa se muestra el total de ataques recibidos por pais de origen.
+
+A modo de leyenda, se representan los ataques con un rango de colores que varían desde:
+
+**Rojo:** País originario del mayor número de ataques.
+
+**Amarillo:** País originario del menor número de ataques.
+
 
 
 ```{r attackperCountry, echo=FALSE}
@@ -110,9 +134,11 @@ renderPlot({
   
 ```
 
-## Preg 3
+## Pregunta 3: Ataques recibidos por origen de aplicación
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+En el siguiente gráfico se muestran los ataques recibidos por origen de aplicación, es decir que protocolo/aplicación han dedicido utilizar los atacantes para vulnerar nuestro sistema.
+
+Por ejemplo, **smtp**, **ftp**, **flash**, **web_browsing**, etc
 
 ```{r attackforApplication, echo=FALSE}
 
@@ -123,9 +149,11 @@ renderPlot({
   
 ```
 
-## Preg 4
+## Pregunta 4: Ataques recibidos por nivel de criticidad
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+En el siguiente gráfico se muestran el numero de ataques recibidos por nivel de criticidad, representado en porcentajes.
+
+Los niveles de criticidad varian desde **critical** hasta **low**, donde **critical** es el nivel de ataque más dañino si logran vulnerar el sistema  y **low** es el nivel de ataque con menos afectación en el sistema.
 
 ```{r levelofRisk, echo=FALSE}
 
@@ -137,6 +165,13 @@ renderPlot({
 ```
 
 
+## Pregunta 5: Efectividad del sistema de reputacion web del antivirus
+
+En el siguiente gráfico se muestra el nivel de efectividad del sistema de reputación web (**WRS**) del antivirus perimetral, es decir:
+
+Se comparan las IP's categorizadas por el WRS como **benignas** con una lista pública de IP's maliciosas.
+
+En el caso de aparecer alguna de las IP en la lista negra publicada, se considerará como un fallo de categorización del antivirus y se añadirán en un fichero de texto que será utilizado a posteriori por el firewall perimetral con el fin de bloquear las IP's que aparezcan en el fichero y así poder aumentar el nivel de protección de nuestra infraestructura.
 
 
 
