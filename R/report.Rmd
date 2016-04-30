@@ -1,6 +1,8 @@
 ---
 title: "DataMining Project"
 runtime: shiny
+author: "Joshua García\nSergi Carmona\nÓscar Conejo"
+date: "01/05/2016"
 output: html_document
 ---
 
@@ -11,11 +13,29 @@ output: html_document
 <!-- knitr::include_graphics("http://grlum.dpe.upc.edu/img/upc.gif") -->
 <!-- ``` -->
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+En el siguiente documento se realizará un análisis de las funcionalidades y capacidades de deteccion del antivirus perimetral de la empresa **JSO S.A.**
 
-To learn more, see [Github link](https://github.com/TheMaphius/DataMiningProject/tree/joshuagp).
+Se analizarán al detalle los siguientes puntos:
 
-```{r loadLibraries, echo=FALSE}
+* **Ataques recibidos por franja horaria**  
+
+* **Ataques recibidos por pais de origen**
+
+* **Ataques recibidos por origen de aplicación**
+
+* **Ataques recibidos por nivel de criticidad**
+
+* **Efectividad del sistema de reputacion web del antivirus**
+
+Material: 
+
+* **Link download CSV file [MEGA link](https://mega.nz/#!3t4VwYyb!YPSYUmgndXMGByXlGRsQJtkBp_-KkWYZPiUUX3wJTGU)**  
+
+Fuentes:  
+
+* **To learn more, see [Github link](https://github.com/TheMaphius/DataMiningProject/tree/joshuagp).**  
+
+```{r loadLibraries, echo=FALSE, warning=FALSE, results='hide'}
   library(ggplot2)
   library(MASS)
   library(plotrix)
@@ -24,26 +44,28 @@ To learn more, see [Github link](https://github.com/TheMaphius/DataMiningProject
   library(sp)
 ```
 
-```{r readcsv, echo=TRUE}
+```{r readcsv, echo=TRUE, results='hide'}
 
-  # Download CSV from repository
-  # fileUrl = "https://raw.githubusercontent.com/TheMaphius/DataMiningProject/master/resources/XXXXXX.csv"
-  # if(!file.exists("./resources")){dir.create("./resources")}
-  # download.file(fileUrl, destfile = "./resources/log_tuneado.csv", method = "curl")
-
-  #path = paste(getwd(),"/resources/log_tuneado.csv",sep="")
-  path = paste("C:/Users/Joshua/Documents/dataminingproject/resources/log_tuneado.csv",sep="")
-
-  csv<<-read.csv(file=path, header=FALSE, sep=";",
-                   col.names = c("c1","TimeStamp","c3","c4","c5","c6","c7","IP_origen","IP_Publica","c10","IP_interna","c12","c13","Protocolo","c15","Desde","Hacia","c18","c19","c20","c21","c22","c23","c24","Puerto_destino","c26","c27","c28","c29","c30","c31","32","Malicioso","Nivel_de_riesgo","35","c36","c37","Pais_origen","Pais_destino","c40","c41","c42","c43","c44","c45","c46","c47","c48","c49","Sender","Subject","Remitente","c53","c54","c55","c56","c57"), colClasses = c("character", "factor", "factor", "character" )) [,c("TimeStamp","IP_origen","IP_Publica","Protocolo","Desde","Hacia","Puerto_destino","Malicioso","Nivel_de_riesgo","Pais_origen","Pais_destino","Sender","Subject","Remitente")]
-
+  setwd('..')
+  if(!file.exists(paste( getwd(), "/resources", sep = ""))){
+     dir.create("./resources")
+  }
+  
+  path = paste(getwd(),"/resources/full_log_v2.csv",sep="")
+  csv<<-read.csv(file=path, header=FALSE, sep=";", col.names = c("c1","TimeStamp","c3","c4","c5","c6","c7","IP_origen","IP_Publica","c10","IP_interna","c12","c13","Protocolo","c15","Desde","Hacia","c18","c19","c20","c21","c22","c23","c24","Puerto_destino","c26","c27","c28","c29","c30","c31","32","Malicioso","Nivel_de_riesgo","35","c36","c37","Pais_origen","Pais_destino","c40","c41","c42","c43","c44","c45","c46","c47","c48","c49","Sender","Subject","Remitente","c53","c54","c55","c56","c57","c58","c59","c60","c61","c62"), colClasses = c("character", "factor", "factor", "character" )) [,c("TimeStamp","IP_origen","IP_Publica","Protocolo","Desde","Hacia","Puerto_destino","Malicioso","Nivel_de_riesgo","Pais_origen","Pais_destino","Sender","Subject","Remitente")]
+  
   numLines<<-length(csv$TimeStamp)
   
 ```
 
-## Preg 1
+## Pregunta 1: Ataques recibidos por franja horaria
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+A continuación se muestra un gráfico mensual de los ataques recibidos por franja horaria.
+
+El estado actual del gráfico, es una relacion de todos los ataques recibidos sin filtrar por mes y por año.
+
+A modo de **ejemplo**, si filtramos por el mes de Marzo en el año 2016 se puede apreciar que a las 09:00 h se detectaron el mayor numero de ataques.
+
 
 ```{r rateAttack, echo=FALSE}
   
@@ -78,28 +100,49 @@ renderPlot({
   }
 
   percents<-(hours/n)*100
-  plot(percents)
+  if(n != 0)
+    barplot(percents)
+  else
+    print("No hay datos para esta fecha.")
   
 })
 
 ```
 
-## Preg 2
+## Pregunta 2: Ataques recibidos por pais de origen
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+En el siguiente mapa se muestra el total de ataques recibidos por pais de origen.
+
+A modo de leyenda, se representan los ataques con un rango de colores que varían desde:
+
+**Rojo:** País originario del mayor número de ataques.
+
+**Amarillo:** País originario del menor número de ataques.
 
 
-```{r attackperCountry, echo=FALSE}
+
+```{r attackperworld, echo=FALSE, warning=FALSE, results='hide'}
   
   countries <- table(csv$Pais_origen)
 
   dataframe <- data.frame(country=names(countries),
                           value=(as.vector(countries)/numLines)*100)
 
-  country2Map <- joinCountryData2Map(dataframe,
+  country2Map <<- joinCountryData2Map(dataframe,
                                      joinCode="ISO2",
                                      nameJoinColumn="country")
 
+  mapCountryData(country2Map,
+                 nameColumnToPlot="value",
+                 mapTitle="World",
+                 colourPalette="red2yellow",
+                 addLegend=FALSE,
+                 oceanCol="lightblue", missingCountryCol="black")
+```
+
+El gráfico mostrado muestra los ataques a nivel mundial hacía nuestra empresa. Como se puede observar los continentes que más ataques originan son América y Europa.
+
+```{r attackperCountry, echo=FALSE, warning=FALSE, results='hide'}
   mapCountryData(country2Map,
                  nameColumnToPlot="value",
                  mapTitle="Europe",
@@ -110,33 +153,76 @@ renderPlot({
   
 ```
 
-## Preg 3
+A nivel Europeo se puede ver como los países como España, Francia, Reino Unido, Alemania, Italia y parte de los países Nordicos inician ataques hacia nosotros que el antivirus puede parar.
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+## Pregunta 3: Ataques recibidos por origen de aplicación
+
+En el siguiente gráfico se muestran los ataques recibidos por origen de aplicación, es decir que protocolo/aplicación han dedicido utilizar los atacantes para vulnerar nuestro sistema.
+
+Por ejemplo, **smtp**, **ftp**, **flash**, **web_browsing**, etc
 
 ```{r attackforApplication, echo=FALSE}
-
   attack<-table(csv$Protocolo)
   percents<-(attack/numLines)*100
-  print(percents)
-  pie(percents, col = c("red", "yellow", "green", "violet", "orange", "blue", "pink", "cyan"))
+  pie(percents[as.vector(percents) > 1], main="Ataques por aplicación", col=rainbow(length(percents[as.vector(percents) > 1])), labels = paste(round(as.vector(percents[as.vector(percents) > 1]), digits = 2), "%", sep=""))
+  legend("bottomright", names(percents[as.vector(percents) > 1]), cex=0.8, fill=rainbow(length(percents[as.vector(percents) > 1])))
   
 ```
 
-## Preg 4
+## Pregunta 4: Ataques recibidos por nivel de criticidad
 
-`Lorem ipsum` dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+En el siguiente gráfico muestra el número de ataques recibidos por nivel de criticidad, representado en porcentajes.
+
+Los niveles de criticidad varian desde **critical** hasta **low**, donde **critical** es el nivel de ataque más dañino si logran vulnerar el sistema  y **low** es el nivel de ataque con menos afectación en el sistema.
 
 ```{r levelofRisk, echo=FALSE}
 
   risk<-table(csv$Nivel_de_riesgo)
   percents<-(risk/numLines)*100
-  print(percents)
-  pie3D(percents, col=c("red", "orange", "yellow", "blue"), main="Pie chart Level of Risk")
+  color<-c("red", "blue", "yellow")
+  pie(percents, main="Riesgo de ataques", col=color, labels = paste(round(as.vector(percents), digits = 2), "%", sep=""))
+  legend("bottomright", names(percents), cex=0.8, fill=color)
   
 ```
 
 
+## Pregunta 5: Efectividad del sistema de reputacion web del antivirus
 
+En el siguiente gráfico se muestra el nivel de efectividad del sistema de reputación web (**WRS**) del antivirus perimetral, es decir:
 
+Se comparan las IP's categorizadas por el WRS como **benignas** con una lista pública de IP's maliciosas.
 
+En el caso de aparecer alguna de las IP en la lista negra publicada, se considerará como un fallo de categorización del antivirus y se añadirán en un fichero de texto que será utilizado a posteriori por el firewall perimetral con el fin de bloquear las IP's que aparezcan en el fichero y así poder aumentar el nivel de protección de nuestra infraestructura.
+
+```{r IPfalseNegative, echo=FALSE}
+  setwd('..')
+  if(!file.exists(paste(getwd(), "/resources/blacklist.csv", sep=""))){
+    download.file("http://www.talosintel.com/feeds/ip-filter.blf", destfile = paste(getwd(), "/resources/blacklist.csv", sep=""))
+  }
+
+  path<-paste(getwd(),"/resources/blacklist.csv", sep = "")
+  ips<<-read.csv(file=path, header = FALSE, col.names = "IP", colClasses = "character")
+
+  fileredIps<-table(csv$IP_origen[csv$Malicioso=="benign"] %in% unique(ips$IP))
+  percents<-(fileredIps/numLines)*100
+  pie(percents, col=rainbow(length(percents)), main="IPs Falsos Negativos", labels = paste(round(as.vector(percents), digits = 2), "%", sep=""))
+  legend("bottomright", names(percents), cex=0.8, fill=rainbow(length(percents)))
+
+  blacklist <- list()
+  i = 1
+
+  print("Las siguientes IPs son falsos negativos:")
+  for(ip_malicious in unique(csv$IP_origen[csv$Malicioso=="benign"])){
+    for(ip_blacklist in ips$IP){
+      if(as.character(ip_malicious) ==  as.character(ip_blacklist)){
+        blacklist$ip[i] <- ip_malicious
+        i <- i + 1
+        print(ip_malicious)
+      }
+    }
+  }
+
+  write.csv(x = blacklist, paste(getwd(), "/resources/blacklistFile.csv", sep=""), row.names = FALSE)
+```
+
+El resultado que podemos extraer es que el antivirus tiene un nivel bajo de falsos negativos ya que el número de IPs categorizadas como benignas son tal como dice ser.
