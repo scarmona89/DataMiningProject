@@ -1,0 +1,9 @@
+Package: dataminingproject
+Type: Package
+Title: DataMiningProject
+Version: 0.1.0
+Author: Joshua García Palacios
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: Proyect from Data Driver Security
+License: GNU
+LazyData: TRUE
